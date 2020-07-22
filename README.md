@@ -19,3 +19,4 @@ Check out the [demo website](https://stuffjackmakes.com/fsix/) for more informat
 
 # Usage
 
+Download the [tar.gz file](https://github.com/StuffJackMakes/Sixteen-Font/raw/master/Sixteen.tar.gz) with the font files, decompress it, and use the font!
