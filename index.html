@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<!-- See https://github.com/StuffJackMakes/Message-In-A-URL for implementation details -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="Create messages within a URL">
+        <meta name="keywords" content="url, shortener, lengthener, message, obfuscation">
+        <meta name=author content="Jack Sivak">
+        <meta name=viewport content="width=device-width">
+
+
+        <title>"Sixteen": 16-Segment Font</title>
+        <link rel="icon" type="image/png" href="favicon.png">
+        <style>
+            @font-face {
+                font-family: "Sixteen";
+                font-weight: 300;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen-Light.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen-Light.woff") format("woff");
+            }
+
+            @font-face {
+                font-family: "Sixteen";
+                font-weight: 400;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen.woff") format("woff");
+            }
+
+            @font-face {
+                font-family: "Sixteen";
+                font-weight: 700;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen-Bold.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen-Bold.woff") format("woff");
+            }
+
+            @font-face {
+                font-family: "Sixteen-Mono";
+                font-weight: 300;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen-Mono-Light.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen-Mono-Light.woff") format("woff");
+            }
+
+            @font-face {
+                font-family: "Sixteen-Mono";
+                font-weight: 400;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen-Mono.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen-Mono.woff") format("woff");
+            }
+
+            @font-face {
+                font-family: "Sixteen-Mono";
+                font-weight: 700;
+                font-style: normal;
+                src: url("sixteen/woff2/Sixteen-Mono-Bold.woff2") format("woff2");
+                src: url("sixteen/woff/Sixteen-Mono-Bold.woff") format("woff");
+            }
+
+            html {
+                font-family: Gothic, sans-serif;
+                color: #000;
+                line-height: 1.4;
+                font-size: 18px;
+            }
+
+            body {
+                margin: 0px 12px;
+            }
+
+            light {
+                font-weight: 300;
+            }
+            
+            .sample {
+                font-family: Sixteen-Mono;
+            }
+
+            .sample-variable {
+                font-family: Sixteen;
+            }
+
+            .stacked {
+                color: rgba(0,0,0,0.1);
+                position: relative;
+            }
+
+            .stacked span:nth-of-type(1) {
+                position: absolute;
+                left: 0px;
+                color: #000;
+            }
+
+            title {
+                display: block;
+                margin: 12px 24px;
+                padding: 8px;
+                font-size: 36px;
+                border-radius: 12px;
+                background-color: #333388;
+                color: #fff;
+            }
+
+            h1 {
+                color: #333388;
+                border-bottom: 1px solid #333388;
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+                border-left: 8px solid #883300;
+                padding-left: 5px;
+                margin-top: 24px;
+            }
+
+            button {
+                background-color: #333388;
+                border: 4px solid #333388;
+                color: #fff;
+                font-size: 32px;
+                font-weight: bold;
+                padding: 0.25em;
+                border-radius: 0.5em;
+                box-shadow: 4px 4px 8px #888;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #fff;
+                color: #333388;
+                text-decoration: underline;
+            }
+
+            .clock-wrapper {
+                display: inline-block;
+                position: relative;
+                padding: 8px;
+                border: 6px solid #000;
+                border-radius: 10px;
+                background-color: #fb7c00;
+                box-shadow: 4px 4px 1px 0px rgba(0,0,0,0.1) inset;
+            }
+
+            select {
+                font-size: 24px;
+                padding: 2px 10px;
+            }
+
+            textarea {
+                font-family: Sixteen-Mono;
+                display: block;
+                box-sizing: border-box;
+                width: 80%;
+                font-size: 32px;
+                padding: 0.25em;
+                border-radius: 10px;
+                height: 5em;
+                resize: vertical;
+                line-height: 1.25em;
+            }
+
+            .example {
+                display: flex;
+                align-items: center;
+                margin: 0px;
+                font-size: 48px;
+            }
+
+            .example span {
+                font-family: Sixteen-Mono;
+                padding-left: 10px;
+            }
+
+            table {
+                font-size: 20px;
+                text-align: center;
+                border-collapse: collapse;
+                margin-right: 18px;
+            }
+
+            th {
+                padding: 5px;
+                vertical-align: top;
+                color: #333;
+                background-color: #eee;
+                border: 1px solid #555;
+            }
+
+            td {
+                background-color: #fafaf7;
+                border: 1px solid #555;
+            }
+
+            tr td:nth-of-type(3) {
+                font-family: Sixteen-Mono;
+            }
+            /*
+            a {
+                font-weight: bolder;
+                color: #000;
+                text-decoration: none;
+            }
+
+            a:hover {
+                color: #0270c9;
+            }*/
+
+            footer {
+                border-top: 2px solid #000;
+                padding: 0.5em;
+                margin-top: 2em;
+                text-align: center;
+            }
+        </style>
+        <script type="text/javascript">
+            let dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            function UpdateTimer() {
+                let dayElement = document.getElementById("clockDay"),
+                    dateElement = document.getElementById("clockDate"),
+                    timeElement = document.getElementById("clockTime"),
+                    secondsElement = document.getElementById("clockSeconds");
+
+                let date = new Date();
+                let year, monthName, day, dayName, hours, minutes, seconds;
+                let colon = " ";
+
+                dayElement.textContent = dayNames[date.getDay()];
+                dateElement.textContent = [monthNames[date.getMonth()].toUpperCase().padStart(9, "°"),
+                                           date.getDate(), date.getFullYear()].join(" ");
+                timeElement.textContent = date.getHours() + (date.getMilliseconds() < 500 ? ":" : " ") + date.getMinutes();
+                secondsElement.textContent = date.getSeconds();
+
+                setTimeout("UpdateTimer()", 500 - date.getMilliseconds() % 500);
+            }
+
+            function FontSelect() {
+                let selectedValue = document.getElementById("inputTestSelect").value,
+                    selectedFont = selectedValue.substring(0, selectedValue.indexOf(",")),
+                    selectedWeight = selectedValue.substring(selectedValue.indexOf(",") + 1);
+                document.getElementById("inputTest").style.fontFamily = selectedFont;
+                document.getElementById("inputTest").style.fontWeight = selectedWeight;
+            }
+        </script>
+    </head>
+    <body onload="UpdateTimer()">
+        <!--
+        https://www.keshikan.net/fonts-e.html
+        https://github.com/dmadison/LED-Segment-ASCII
+        -->
+        <title>"Sixteen": Original 16-Segment Font</title>
+        <h1>Overview</h1>
+        <div style="padding-left: 36px; font-size: 28px;">
+            <div class="sample"><light>LIGHT</light> NORMAL <strong>BOLD</strong></div>
+            <div class="sample stacked">
+                ;;;; ;; ;;; ;;;; ;;;; ;;;;; ;;;;;; ;;;;
+                <span>PACK MY BOX WITH FIVE DOZEN LIQUOR JUGS</span>
+            </div>
+            <div class="sample stacked">
+                ;;;; ;; ;;; ;;;; ;;;; ;;;;; ;;;;;; ;;;;
+                <span>pack my box with five dozen liquor jugs</span>
+            </div>
+            <siv class="sample-variable">Variable-width is also available!</div>
+        </div>
+        <p><strong>Sixteen</strong> is a font family that imitates a <a href="https://en.wikipedia.org/wiki/Sixteen-segment_display">sixteen-segment display</a>. Its features include:</p>
+        <ul>
+            <li>All standard <a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> chracters (except semicolon, which is an all-on character)</li>
+            <li>Light, regular, and bold weights</li>
+            <li>Monospace and variable-width versions</li>
+            <li>Available in <a href="https://en.wikipedia.org/wiki/TrueType">TrueType</a> (*.ttf), <a href="https://en.wikipedia.org/wiki/OpenType">OpenType</a> (*.otf), and <a href="https://en.wikipedia.org/wiki/Web_Open_Font_Format">Web Open Font Format</a> (*.woff, *.woff2)</li>
+            <li>Licensed under the <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">SIL Open Font License 1.1</a></li>
+        <center><button>Download Font "Sixteen"</button></center>
+
+        <h1>Application Example</h1>
+        <div class="clock-wrapper">
+            <div class="sample stacked" style="font-size: 32px;">
+                ;;;;;;;;;<span id="clockDay">Wednesday</span>
+            </div>
+            <div class="sample stacked" style="font-size: 22px;">
+                ;;;;;;;;; ;; ;;;;<span id="clockDate">JANUARY 01 2020</span>
+            </div>
+            <div class="sample stacked" style="display: inline-block; font-size: 64px;">
+                ;;:;;<span id="clockTime">00:00</span>
+            </div>
+            <div class="sample stacked" style="display: inline-block; font-size: 32px;">
+                ;;<span id="clockSeconds">00</span>
+            </div>
+        </div>
+        <p>The above clock only uses CSS and Javascript</p>
+
+        <h1>Usage</h1>
+        <h2>Input Test</h2>
+        <select id="inputTestSelect" onchange="FontSelect()">
+            <option value="Sixteen-Mono,400">Sixteen Mono Regular</option>
+            <option value="Sixteen-Mono,300" style="font-weight: 300">Sixteen Mono Light</option>
+            <option value="Sixteen-Mono,700" style="font-weight: 700">Sixteen Mono Bold</option>
+            <option value="Sixteen,400">Sixteen Regular</option>
+            <option value="Sixteen,300" style="font-weight: 300">Sixteen Light</option>
+            <option value="Sixteen,700" style="font-weight: 700">Sixteen Bold</option>
+        </select>
+        <textarea id="inputTest">PACK MY BOX WITH FIVE DOZEN LIQUOR JUGS
+pack my box with five dozen liquor jugs</textarea>
+        <h2>All-On Character</h2>
+        <div>The semicolon character (U+003B)";" is used as an "all-on" character.</div>
+        <div class="example">; → <span>;</span></div>
+        <h2>All-Off Character</h2>
+        <div>The degree character (U+00B0)"°" is used as an "all-off" character - space with width equal to the rest of the characters. This is useful for padding.</div>
+        <div class="example">°PAD° → <span class="sample stacked">;;;;;<span>°PAD°</span></span></div>
+        <h2>Space-Width Colon</h2>
+        <div>The width of the colon character (U+003A)":" and the space character (U+0020) are equal. This allows the characters to be switched to imitate the colon-blinking effect found on digital clocks.</div>
+        <div class="example">23:45 → <span class="sample stacked">;; ;;<span>23:45</span></span></div>
+        <div class="example">23 45 → <span class="sample stacked">;; ;;<span>23 45</span></span></div>
+        <h2>No-Width Period</h2>
+        While the regular period character (U+002E)"." has a non-zero width, there is a character (U+00B1)"±" that acts as a period with zero font width. This allows the use of period-migration-expression, which is often used in calculators.
+        <div class="example">98±7 → <span class="sample stacked">;;;<span>98±7</span></span></div>
+        <div class="example">9±87 → <span class="sample stacked">;;;<span>9±87</span></span></div>
+        <h2>Character codes</h2>
+        <div style="display: flex">
+            <table>
+                <thead><tr><th>Unicode</th><th>Character</th><th>Sixteen</th></tr></thead>
+                <tbody>
+                    <tr><td>U+0021</td><td>!</td><td>!</td></tr>
+                    <tr><td>U+0022</td><td>"</td><td>"</td></tr>
+                    <tr><td>U+0023</td><td>#</td><td>#</td></tr>
+                    <tr><td>U+0024</td><td>$</td><td>$</td></tr>
+                    <tr><td>U+0025</td><td>%</td><td>%</td></tr>
+                    <tr><td>U+0026</td><td>&</td><td>&</td></tr>
+                    <tr><td>U+0027</td><td>'</td><td>'</td></tr>
+                    <tr><td>U+0028</td><td>(</td><td>(</td></tr>
+                    <tr><td>U+0029</td><td>)</td><td>)</td></tr>
+                    <tr><td>U+002A</td><td>*</td><td>*</td></tr>
+                    <tr><td>U+002B</td><td>+</td><td>+</td></tr>
+                    <tr><td>U+002C</td><td>,</td><td>,</td></tr>
+                    <tr><td>U+002D</td><td>-</td><td>-</td></tr>
+                    <tr><td>U+002E</td><td>.</td><td>.</td></tr>
+                    <tr><td>U+002F</td><td>/</td><td>/</td></tr>
+                    <tr><td>U+0030</td><td>0</td><td>0</td></tr>
+                    <tr><td>U+0031</td><td>1</td><td>1</td></tr>
+                    <tr><td>U+0032</td><td>2</td><td>2</td></tr>
+                    <tr><td>U+0033</td><td>3</td><td>3</td></tr>
+                    <tr><td>U+0034</td><td>4</td><td>4</td></tr>
+                    <tr><td>U+0035</td><td>5</td><td>5</td></tr>
+                    <tr><td>U+0036</td><td>6</td><td>6</td></tr>
+                    <tr><td>U+0037</td><td>7</td><td>7</td></tr>
+                    <tr><td>U+0038</td><td>8</td><td>8</td></tr>
+                </tbody>
+            </table>
+            <table>
+                <thead><tr><th>Unicode</th><th>Character</th><th>Sixteen</th></tr></thead>
+                <tbody>
+                    <tr><td>U+0039</td><td>9</td><td>9</td></tr>
+                    <tr><td>U+003A</td><td>:</td><td>:</td></tr>
+                    <tr><td>U+003B</td><td>;</td><td>;</td></tr>
+                    <tr><td>U+003C</td><td><</td><td><</td></tr>
+                    <tr><td>U+003D</td><td>=</td><td>=</td></tr>
+                    <tr><td>U+003E</td><td>></td><td>></td></tr>
+                    <tr><td>U+003F</td><td>?</td><td>?</td></tr>
+                    <tr><td>U+0040</td><td>@</td><td>@</td></tr>
+                    <tr><td>U+0041</td><td>A</td><td>A</td></tr>
+                    <tr><td>U+0042</td><td>B</td><td>B</td></tr>
+                    <tr><td>U+0043</td><td>C</td><td>C</td></tr>
+                    <tr><td>U+0044</td><td>D</td><td>D</td></tr>
+                    <tr><td>U+0045</td><td>E</td><td>E</td></tr>
+                    <tr><td>U+0046</td><td>F</td><td>F</td></tr>
+                    <tr><td>U+0047</td><td>G</td><td>G</td></tr>
+                    <tr><td>U+0048</td><td>H</td><td>H</td></tr>
+                    <tr><td>U+0049</td><td>I</td><td>I</td></tr>
+                    <tr><td>U+004A</td><td>J</td><td>J</td></tr>
+                    <tr><td>U+004B</td><td>K</td><td>K</td></tr>
+                    <tr><td>U+004C</td><td>L</td><td>L</td></tr>
+                    <tr><td>U+004D</td><td>M</td><td>M</td></tr>
+                    <tr><td>U+004E</td><td>N</td><td>N</td></tr>
+                    <tr><td>U+004F</td><td>O</td><td>O</td></tr>
+                    <tr><td>U+0050</td><td>P</td><td>P</td></tr>
+                </tbody>
+            </table>
+            <table>
+                <thead><tr><th>Unicode</th><th>Character</th><th>Sixteen</th></tr></thead>
+                <tbody>
+                    <tr><td>U+0051</td><td>Q</td><td>Q</td></tr>
+                    <tr><td>U+0052</td><td>R</td><td>R</td></tr>
+                    <tr><td>U+0053</td><td>S</td><td>S</td></tr>
+                    <tr><td>U+0054</td><td>T</td><td>T</td></tr>
+                    <tr><td>U+0055</td><td>U</td><td>U</td></tr>
+                    <tr><td>U+0056</td><td>V</td><td>V</td></tr>
+                    <tr><td>U+0057</td><td>W</td><td>W</td></tr>
+                    <tr><td>U+0058</td><td>X</td><td>X</td></tr>
+                    <tr><td>U+0059</td><td>Y</td><td>Y</td></tr>
+                    <tr><td>U+005A</td><td>Z</td><td>Z</td></tr>
+                    <tr><td>U+005B</td><td>[</td><td>[</td></tr>
+                    <tr><td>U+005C</td><td>\</td><td>\</td></tr>
+                    <tr><td>U+005D</td><td>]</td><td>]</td></tr>
+                    <tr><td>U+005E</td><td>^</td><td>^</td></tr>
+                    <tr><td>U+005F</td><td>_</td><td>_</td></tr>
+                    <tr><td>U+0060</td><td>`</td><td>`</td></tr>
+                    <tr><td>U+0061</td><td>a</td><td>a</td></tr>
+                    <tr><td>U+0062</td><td>b</td><td>b</td></tr>
+                    <tr><td>U+0063</td><td>c</td><td>c</td></tr>
+                    <tr><td>U+0064</td><td>d</td><td>d</td></tr>
+                    <tr><td>U+0065</td><td>e</td><td>e</td></tr>
+                    <tr><td>U+0066</td><td>f</td><td>f</td></tr>
+                    <tr><td>U+0067</td><td>g</td><td>g</td></tr>
+                    <tr><td>U+0068</td><td>h</td><td>h</td></tr>
+                </tbody>
+            </table>
+            <table>
+                <thead><tr><th>Unicode</th><th>Character</th><th>Sixteen</th></tr></thead>
+                <tbody>
+                    <tr><td>U+0069</td><td>i</td><td>i</td></tr>
+                    <tr><td>U+006A</td><td>j</td><td>j</td></tr>
+                    <tr><td>U+006B</td><td>k</td><td>k</td></tr>
+                    <tr><td>U+006C</td><td>l</td><td>l</td></tr>
+                    <tr><td>U+006D</td><td>m</td><td>m</td></tr>
+                    <tr><td>U+006E</td><td>n</td><td>n</td></tr>
+                    <tr><td>U+006F</td><td>o</td><td>o</td></tr>
+                    <tr><td>U+0070</td><td>p</td><td>p</td></tr>
+                    <tr><td>U+0071</td><td>q</td><td>q</td></tr>
+                    <tr><td>U+0072</td><td>r</td><td>r</td></tr>
+                    <tr><td>U+0073</td><td>s</td><td>s</td></tr>
+                    <tr><td>U+0074</td><td>t</td><td>t</td></tr>
+                    <tr><td>U+0075</td><td>u</td><td>u</td></tr>
+                    <tr><td>U+0076</td><td>v</td><td>v</td></tr>
+                    <tr><td>U+0077</td><td>w</td><td>w</td></tr>
+                    <tr><td>U+0078</td><td>x</td><td>x</td></tr>
+                    <tr><td>U+0079</td><td>y</td><td>y</td></tr>
+                    <tr><td>U+007A</td><td>z</td><td>z</td></tr>
+                    <tr><td>U+007B</td><td>{</td><td>{</td></tr>
+                    <tr><td>U+007C</td><td>|</td><td>|</td></tr>
+                    <tr><td>U+007D</td><td>}</td><td>}</td></tr>
+                    <tr><td>U+007E</td><td>~</td><td>~</td></tr>
+                    <tr><td>U+00B0</td><td>°</td><td>°</td></tr>
+                    <tr><td>U+00B1</td><td>±</td><td>±</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h1>License</h1>
+        <p>Sixteen uses the <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">SIL Open Font License 1.1</a>, and can be used for commercial or non-commercial applications, modified, or redistributed.</p>
+        <strong>Do's</strong>
+        <ul>
+            <li>When redistributing Sixteen itself or a modified version, include <a href="#">Sixteen-LICENSE.txt</a></li>
+            <li>Sixteen can be embedded in a document or bundled with a program without the license text</li>
+            <li>Refer to <a href="https://scripts.sil.org/cms/scripts/page.php?item_id=OFL-FAQ_web">the license FAQ</a> for any questions</li>
+        </ul>
+        <strong>Dont's</strong>
+        <ul>
+            <li>Claim authorship of Sixteen</li>
+            <li>Sell Sixteen or a modified version thereof</li>
+        </ul>
+        <footer>
+            Made by <a href="stuffjackmakes.com">Jack Sivak</a>. Check out the project on <a href="https://github.com/StuffJackMakes/Sixteen-Font">Github</a>
+        </footer>
+    </body>
+</html>
