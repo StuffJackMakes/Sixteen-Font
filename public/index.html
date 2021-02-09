@@ -222,7 +222,7 @@
 
                 dayElement.textContent = dayNames[date.getDay()];
                 dateElement.textContent = [monthNames[date.getMonth()].toUpperCase().padStart(9, "°"),
-                                           date.getDate(), date.getFullYear()].join(" ");
+                                           date.getDate().toString().padStart(2, "°"), date.getFullYear()].join(" ");
                 timeElement.textContent = date.getHours() + (date.getMilliseconds() < 500 ? ":" : " ") + date.getMinutes();
                 secondsElement.textContent = date.getSeconds();
 
