@@ -223,8 +223,8 @@
                 dayElement.textContent = dayNames[date.getDay()];
                 dateElement.textContent = [monthNames[date.getMonth()].toUpperCase().padStart(9, "°"),
                                            date.getDate().toString().padStart(2, "°"), date.getFullYear()].join(" ");
-                timeElement.textContent = date.getHours() + (date.getMilliseconds() < 500 ? ":" : " ") + date.getMinutes();
-                secondsElement.textContent = date.getSeconds();
+                timeElement.textContent = date.getHours().toString().padStart(2, "°") + (date.getMilliseconds() < 500 ? ":" : " ") + date.getMinutes().toString().padStart(2, "°");
+                secondsElement.textContent = date.getSeconds().toString().padStart(2, "°");
 
                 setTimeout("UpdateTimer()", 500 - date.getMilliseconds() % 500);
             }
